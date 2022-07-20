@@ -8,13 +8,16 @@ import cv2
 # cap = cv2.VideoCapture("shmsrc socket-path=/tmp/foo ! video/x-raw, format=BGR ,width=1920,height=1080,framerate=30/1 ! appsink")
 
 ## Update
-cap = cv2.VideoCapture("shmsrc socket-path=/tmp/foo ! video/x-raw, format=BGR, width=640, height=480, pixel-aspect-ratio=1/1, framerate=30/1 ! \
+cap = cv2.VideoCapture("shmsrc socket-path=/tmp/foo ! video/x-raw, format=BGR, width=300, height=300, pixel-aspect-ratio=1/1, framerate=30/1 ! \
      decodebin ! videoconvert ! appsink")
 
 if not cap.isOpened():
     print("Cannot capture from camera. Exiting.")
     quit()
 
+# Define the codec and create VideoWriter object
+# fourcc = cv2.VideoWriter_fourcc(*'XVID')
+# out = cv2.VideoWriter('output.avi',fourcc, 20.0, (640,480))
 
 while True:
 
@@ -23,10 +26,13 @@ while True:
     if ret == False:
         break
 
-
-    cv2.imshow("FrameREAD",frame)
+    cv2.imwrite("frame.jpg",frame)
+    # out.write(frame)
+    # cv2.imshow("FrameREAD",frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+out.release()
+cv2.destroyAllWindows()
 
 # gst-launch-1.0 v4l2src ! x264enc ! shmsink socket-path=/tmp/foo sync=true wait-for-connection=false shm-size=10000000
 

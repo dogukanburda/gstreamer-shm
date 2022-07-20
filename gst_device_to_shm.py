@@ -2,7 +2,7 @@ import time
 import cv2
 
 # Cam properties
-fps = 30.
+fps = 5.
 frame_width = 1920
 frame_height = 1080
 # Create capture
@@ -14,11 +14,11 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, frame_height)
 cap.set(cv2.CAP_PROP_FPS, fps)
 
 # Define the gstreamer sink
-gst_str = "appsrc ! videoconvert ! shmsink socket-path=/tmp/foo sync=true wait-for-connection=false shm-size=10000000"
+gst_str = "appsrc ! videoconvert ! shmsink wait-for-connection=1 socket-path=/tmp/foo sync=true  shm-size=10000000"
 
 # Check if cap is open
 if cap.isOpened() is not True:
-    print "Cannot open camera. Exiting."
+    print ("Cannot open camera. Exiting.")
     quit()
 
 # Create videowriter as a SHM sink
@@ -35,7 +35,7 @@ while True:
         # Write to SHM
         out.write(frame)
     else:
-        print "Camera error."
+        print ("Camera error.")
         time.sleep(10)
 
 cap.release()
